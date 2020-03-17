@@ -1,0 +1,8 @@
+applications:
+- name: boot-app
+path: target/boot-app.jar
+domain: cfapps.io
+memory: 1G
+instances: 1
+services:
+- hrdb
