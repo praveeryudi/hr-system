@@ -20,11 +20,18 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping(value = "/employees")
+    @GetMapping(value = "/employees/all")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> listAllEmployees() {
         return employeeService.getAllEmployees();
+    }
+
+    @GetMapping(value = "/managers/all")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> listAllManagers() {
+        return employeeService.fetchAllManagers();
     }
 
     @PostMapping(value = "/add/employee", produces = MediaType.APPLICATION_JSON_VALUE)
