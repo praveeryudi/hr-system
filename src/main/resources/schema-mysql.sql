@@ -52,3 +52,29 @@ values(101, "Neena", "Kochhar", "NKOCHHAR", "515.123.4568", "2005-09-21", "AD_VP
 COMMIT;*/
 /*INSERT INTO employee(empId,empName)values("emp002","emp2");
 INSERT INTO employee(empId,empName)values("emp003","emp3");*/
+
+DROP TABLE IF EXISTS flat_maintenance_lookup;
+CREATE TABLE flat_maintenance_lookup (
+  flat_number VARCHAR(10) NOT NULL,
+  owner_name VARCHAR(200) NOT NULL,
+  expected_maintenance DOUBLE,
+  PRIMARY KEY (flat_number)
+);
+
+-- Ground Floor Residents
+INSERT INTO flat_maintenance_lookup values("001","Abhishek Rathore", 4300);
+INSERT INTO flat_maintenance_lookup values("003","Priyansh Saxena", 4400);
+INSERT INTO flat_maintenance_lookup values("005","Kavya Sree", 4300);
+INSERT INTO flat_maintenance_lookup values("006","Anuradha Hazarika", 4300);
+INSERT INTO flat_maintenance_lookup values("007","Raja", 4300);
+INSERT INTO flat_maintenance_lookup values("008","Anita Tripathi", 4300);
+INSERT INTO flat_maintenance_lookup values("009","Naresh K", 4300);
+INSERT INTO flat_maintenance_lookup values("010","Ananth", 4800);
+INSERT INTO flat_maintenance_lookup values("011","Sailesh Ramayanam", 4400);
+INSERT INTO flat_maintenance_lookup values("012","Jagadeesh", 4800);
+INSERT INTO flat_maintenance_lookup values("013","Sathish", 4300);
+INSERT INTO flat_maintenance_lookup values("014","Sohel Abdulajij Momin", 4300);
+INSERT INTO flat_maintenance_lookup values("015","Shekhar", 4150);
+INSERT INTO flat_maintenance_lookup values("016","Debashish Behera", 4300);
+
+
