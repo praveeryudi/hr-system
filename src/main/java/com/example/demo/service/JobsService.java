@@ -1,3 +1,4 @@
+/*
 package com.example.demo.service;
 
 import com.example.demo.dao.JobsRepository;
@@ -20,4 +21,4 @@ public class JobsService {
     public List<Jobs> getAllJobs() {
         return jobsRepository.findAll();
     }
-}
+}*/

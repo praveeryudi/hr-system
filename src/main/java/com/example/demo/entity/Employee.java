@@ -1,3 +1,4 @@
+/*
 package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -46,3 +47,4 @@ public class Employee implements Serializable {
     private Integer departmentId;
 
 }
+*/

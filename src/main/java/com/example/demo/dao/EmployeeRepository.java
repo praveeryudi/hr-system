@@ -1,3 +1,4 @@
+/*
 package com.example.demo.dao;
 
 import com.example.demo.entity.Employee;
@@ -16,3 +17,4 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     List<Employee> fetchAllManagers();
 
 }
+*/

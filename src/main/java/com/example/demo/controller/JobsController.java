@@ -1,3 +1,4 @@
+/*
 package com.example.demo.controller;
 
 import com.example.demo.entity.Jobs;
@@ -26,4 +27,4 @@ public class JobsController {
         return jobsService.getAllJobs();
     }
 
-}
+}*/

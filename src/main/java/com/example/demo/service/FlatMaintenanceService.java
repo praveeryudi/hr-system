@@ -8,6 +8,7 @@ import com.example.demo.request.TxnRequest;
 import com.example.demo.response.TxnResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -33,12 +34,14 @@ public class FlatMaintenanceService {
         return maintenanceTxnDAO.findAll();
     }
 
+    @Transactional
     public TxnResponse addMaintenanceTxn(TxnRequest txnRequest) {
         String flatNumber = txnRequest.getFlatNumber();
         Date txnDate = txnRequest.getTxnDate();
         String currentMonth = txnRequest.getMonth();
         String currentYear = txnRequest.getYear();
         Double actualPayment = txnRequest.getActualPayment();
+        String paymentMode = txnRequest.getPaymentMode();
 
         // Compute Balance
         FlatMaintenanceLookUp flatData = flatMaintenanceLookUpDAO.getExpectedPaymentByFlatNumber(flatNumber);
@@ -57,6 +60,7 @@ public class FlatMaintenanceService {
                 .month(currentMonth)
                 .year(currentYear)
                 .actualPayment(actualPayment)
+                .paymentMode(paymentMode)
                 .balance(balance)
                 .build();
 
