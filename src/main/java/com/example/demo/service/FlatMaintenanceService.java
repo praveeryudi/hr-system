@@ -120,8 +120,12 @@ public class FlatMaintenanceService {
         return new String[] {previousMonth, previousYear};
     }
 
-    public void deleteTransaction(TxnRequest txnRequest) {
+    @Transactional
+    public TxnResponse deleteTransaction(TxnRequest txnRequest) {
         MaintenanceTxn txn = maintenanceTxnDAO.getTxn(txnRequest.getMonth(), txnRequest.getYear(), txnRequest.getFlatNumber());
         maintenanceTxnDAO.delete(txn);
+        TxnResponse txnResponse = new TxnResponse();
+        txnResponse.setMaintenanceTxn(txn);
+        return txnResponse;
     }
 }
