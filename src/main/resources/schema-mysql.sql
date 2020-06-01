@@ -54,6 +54,7 @@ COMMIT;*/
 INSERT INTO employee(empId,empName)values("emp003","emp3");*/
 
 DROP TABLE IF EXISTS flat_maintenance_lookup;
+
 CREATE TABLE flat_maintenance_lookup (
   flat_number VARCHAR(10) NOT NULL,
   owner_name VARCHAR(200) NOT NULL,
@@ -76,5 +77,27 @@ INSERT INTO flat_maintenance_lookup values("013","Sathish", 4300);
 INSERT INTO flat_maintenance_lookup values("014","Sohel Abdulajij Momin", 4300);
 INSERT INTO flat_maintenance_lookup values("015","Shekhar", 4150);
 INSERT INTO flat_maintenance_lookup values("016","Debashish Behera", 4300);
+
+-- 2nd Floor residents
+INSERT INTO flat_maintenance_lookup values("213","Jeet Kaushik", 4300);
+
+DROP TABLE IF EXISTS maintenance_txn;
+CREATE TABLE maintenance_txn (
+  txn_id BIGINT NOT NULL,
+  flat_number VARCHAR(10) NOT NULL,
+  txn_date DATE NOT NULL,
+  month VARCHAR(20) NOT NULL,
+  year INT NOT NULL,
+  actual_payment DOUBLE,
+  payment_mode VARCHAR(20) NOT NULL,
+  balance DOUBLE,
+  PRIMARY KEY (txn_id),
+  FOREIGN KEY(flat_number) REFERENCES flat_maintenance_lookup
+);
+
+INSERT INTO maintenance_txn values(101,"007", "2020-05-06", "MAY", 2020, 4500, 0);
+INSERT INTO maintenance_txn values(102,"213", "2020-05-06", "MAY", 2020, 4300, 0);
+
+commit;
 
 

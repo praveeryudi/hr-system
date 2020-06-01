@@ -1,10 +1,13 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.FlatMaintenanceLookUp;
+import com.example.demo.response.TxnResponse;
 import com.example.demo.service.FlatMaintenanceLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import com.example.demo.request.TxnRequest;
 
 import java.util.List;
 
@@ -25,5 +28,12 @@ public class FlatMaintenanceController {
     @ResponseBody
     public List<FlatMaintenanceLookUp> getAllFlatLookupData() {
         return flatMaintenanceLookupService.getAllFlatData();
+    }
+
+    @PostMapping(value = "/addMaintenance", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    public TxnResponse addTransaction(@RequestBody TxnRequest txnRequest) {
+        return flatMaintenanceLookupService.addMaintenanceTxn(txnRequest);
     }
 }
