@@ -48,7 +48,7 @@ public class FlatMaintenanceService {
         Double expectedPayment = flatData.getExpectedMaintenance();
 
         String[] previousTime = getPreviousMonthYear(currentMonth, currentYear);
-        MaintenanceTxn previousTxn = maintenanceTxnDAO.getPreviousTxn(previousTime[0], previousTime[1], flatNumber);
+        MaintenanceTxn previousTxn = maintenanceTxnDAO.getTxn(previousTime[0], previousTime[1], flatNumber);
         Double previousBalance = 0.0;
         if(null != previousTxn) {
             previousBalance = previousTxn.getBalance();
@@ -118,5 +118,10 @@ public class FlatMaintenanceService {
                 break;
         }
         return new String[] {previousMonth, previousYear};
+    }
+
+    public void deleteTransaction(TxnRequest txnRequest) {
+        MaintenanceTxn txn = maintenanceTxnDAO.getTxn(txnRequest.getMonth(), txnRequest.getYear(), txnRequest.getFlatNumber());
+        maintenanceTxnDAO.delete(txn);
     }
 }

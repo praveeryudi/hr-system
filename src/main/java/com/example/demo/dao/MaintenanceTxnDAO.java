@@ -9,5 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface MaintenanceTxnDAO extends JpaRepository<MaintenanceTxn, Long> {
 
     @Query(value = "SELECT mt from MaintenanceTxn mt where mt.month = ?1 AND mt.year = ?2 AND mt.flatNumber = ?3")
-    MaintenanceTxn getPreviousTxn(String previousMonth, String year, String flatNumber);
+    MaintenanceTxn getTxn(String previousMonth, String year, String flatNumber);
+
 }

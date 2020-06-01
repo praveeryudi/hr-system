@@ -38,6 +38,12 @@ public class FlatMaintenanceController {
         return flatMaintenanceService.addMaintenanceTxn(txnRequest);
     }
 
+    @DeleteMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteTxn(@RequestBody TxnRequest txnRequest) {
+        flatMaintenanceService.deleteTransaction(txnRequest);
+    }
+
     @GetMapping(value = "/transactions/all")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
