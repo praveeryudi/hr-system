@@ -1,7 +1,9 @@
 package com.example.demo.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,6 +13,8 @@ import java.util.Date;
 @Entity
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MaintenanceTxn implements Serializable {
 
     @Id
@@ -25,7 +29,7 @@ public class MaintenanceTxn implements Serializable {
     @Column(name = "month", nullable = false)
     private String month;
     @Column(name = "year", nullable = false)
-    private Integer year;
+    private String year;
     @Column(name = "actual_payment", nullable = false)
     private Double actualPayment;
     @Column(name = "payment_mode", nullable = false)

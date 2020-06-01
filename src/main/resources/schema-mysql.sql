@@ -53,17 +53,18 @@ COMMIT;*/
 /*INSERT INTO employee(empId,empName)values("emp002","emp2");
 INSERT INTO employee(empId,empName)values("emp003","emp3");*/
 
-DROP TABLE IF EXISTS flat_maintenance_lookup;
+DROP TABLE IF EXISTS maintenance_txn;
+--DROP TABLE IF EXISTS flat_maintenance_lookup;
 
-CREATE TABLE flat_maintenance_lookup (
+/*CREATE TABLE flat_maintenance_lookup (
   flat_number VARCHAR(10) NOT NULL,
   owner_name VARCHAR(200) NOT NULL,
   expected_maintenance DOUBLE,
   PRIMARY KEY (flat_number)
-);
+);*/
 
 -- Ground Floor Residents
-INSERT INTO flat_maintenance_lookup values("001","Abhishek Rathore", 4300);
+/*INSERT INTO flat_maintenance_lookup values("001","Abhishek Rathore", 4300);
 INSERT INTO flat_maintenance_lookup values("003","Priyansh Saxena", 4400);
 INSERT INTO flat_maintenance_lookup values("005","Kavya Sree", 4300);
 INSERT INTO flat_maintenance_lookup values("006","Anuradha Hazarika", 4300);
@@ -80,24 +81,22 @@ INSERT INTO flat_maintenance_lookup values("016","Debashish Behera", 4300);
 
 -- 2nd Floor residents
 INSERT INTO flat_maintenance_lookup values("213","Jeet Kaushik", 4300);
-commit;
+commit;*/
 
-DROP TABLE IF EXISTS maintenance_txn;
 CREATE TABLE maintenance_txn (
   txn_id BIGINT NOT NULL,
   flat_number VARCHAR(10) NOT NULL,
   txn_date DATE NOT NULL,
   month VARCHAR(20) NOT NULL,
-  year INT NOT NULL,
+  year VARCHAR(5) NOT NULL,
   actual_payment DOUBLE,
   payment_mode VARCHAR(20) NOT NULL,
   balance DOUBLE,
-  PRIMARY KEY (txn_id),
-  FOREIGN KEY(flat_number) REFERENCES flat_maintenance_lookup(flat_number) ON DELETE CASCADE
+  PRIMARY KEY (txn_id)
 );
 
-INSERT INTO maintenance_txn values(101,"007", "2020-05-06", "MAY", 2020, 4500, 0);
-INSERT INTO maintenance_txn values(102,"213", "2020-05-06", "MAY", 2020, 4300, 0);
+INSERT INTO maintenance_txn values(101,"007", "2020-05-06", "MAY", "2020", 4500, "CASH", 0);
+INSERT INTO maintenance_txn values(102,"213", "2020-05-06", "MAY", "2020", 4300, "CASH", 0);
 
 commit;
 

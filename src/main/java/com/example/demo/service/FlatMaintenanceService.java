@@ -13,14 +13,14 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class FlatMaintenanceLookupService {
+public class FlatMaintenanceService {
 
     private final FlatMaintenanceLookUpDAO flatMaintenanceLookUpDAO;
     private final MaintenanceTxnDAO maintenanceTxnDAO;
 
     @Autowired
-    public FlatMaintenanceLookupService(FlatMaintenanceLookUpDAO flatMaintenanceLookUpDAO,
-                                        MaintenanceTxnDAO maintenanceTxnDAO) {
+    public FlatMaintenanceService(FlatMaintenanceLookUpDAO flatMaintenanceLookUpDAO,
+                                  MaintenanceTxnDAO maintenanceTxnDAO) {
         this.flatMaintenanceLookUpDAO = flatMaintenanceLookUpDAO;
         this.maintenanceTxnDAO = maintenanceTxnDAO;
     }
@@ -29,11 +29,15 @@ public class FlatMaintenanceLookupService {
         return flatMaintenanceLookUpDAO.findAll();
     }
 
+    public List<MaintenanceTxn> getAllTransactions() {
+        return maintenanceTxnDAO.findAll();
+    }
+
     public TxnResponse addMaintenanceTxn(TxnRequest txnRequest) {
         String flatNumber = txnRequest.getFlatNumber();
         Date txnDate = txnRequest.getTxnDate();
         String currentMonth = txnRequest.getMonth();
-        Integer currentYear = txnRequest.getYear();
+        String currentYear = txnRequest.getYear();
         Double actualPayment = txnRequest.getActualPayment();
 
         // Compute Balance
@@ -42,7 +46,10 @@ public class FlatMaintenanceLookupService {
 
         String[] previousTime = getPreviousMonthYear(currentMonth, currentYear);
         MaintenanceTxn previousTxn = maintenanceTxnDAO.getPreviousTxn(previousTime[0], previousTime[1], flatNumber);
-        Double previousBalance = previousTxn.getBalance();
+        Double previousBalance = 0.0;
+        if(null != previousTxn) {
+            previousBalance = previousTxn.getBalance();
+        }
         Double balance = actualPayment - expectedPayment + previousBalance;
         MaintenanceTxn maintenanceTxn = MaintenanceTxn.builder()
                 .flatNumber(flatNumber)
@@ -61,13 +68,13 @@ public class FlatMaintenanceLookupService {
         return txnResponse;
     }
 
-    private String[] getPreviousMonthYear(String currentMonth, int currentYear) {
+    private String[] getPreviousMonthYear(String currentMonth, String currentYear) {
         String previousMonth;
-        int previousYear = currentYear;
+        String previousYear = currentYear;
         switch(currentMonth) {
             case "JAN":
                 previousMonth = "DEC";
-                previousYear = currentYear - 1;
+                previousYear = String.valueOf(Integer.valueOf(currentYear) - 1);
                 break;
             case "FEB":
                 previousMonth = "JAN";
@@ -106,6 +113,6 @@ public class FlatMaintenanceLookupService {
                 previousMonth = currentMonth;
                 break;
         }
-        return new String[] {previousMonth, String.valueOf(previousYear)};
+        return new String[] {previousMonth, previousYear};
     }
 }

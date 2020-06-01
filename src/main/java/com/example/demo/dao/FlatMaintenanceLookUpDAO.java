@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FlatMaintenanceLookUpDAO extends JpaRepository<FlatMaintenanceLookUp, String> {
 
-    @Query(value = "SELECT l from FlatMaintenanceLookUp l where l.flatNumber = ?1")
+    @Query(value = "SELECT ml from FlatMaintenanceLookUp ml where ml.flatNumber = ?1")
     FlatMaintenanceLookUp getExpectedPaymentByFlatNumber(String flatNumber);
 }

@@ -13,7 +13,7 @@ public class TxnRequest implements Serializable {
     private Date txnDate;
     private String flatNumber;
     private String month;
-    private Integer year;
+    private String year;
     private Double actualPayment;
     private String paymentMode;
 }
