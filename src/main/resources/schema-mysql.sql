@@ -80,6 +80,7 @@ INSERT INTO flat_maintenance_lookup values("016","Debashish Behera", 4300);
 
 -- 2nd Floor residents
 INSERT INTO flat_maintenance_lookup values("213","Jeet Kaushik", 4300);
+commit;
 
 DROP TABLE IF EXISTS maintenance_txn;
 CREATE TABLE maintenance_txn (
@@ -92,7 +93,7 @@ CREATE TABLE maintenance_txn (
   payment_mode VARCHAR(20) NOT NULL,
   balance DOUBLE,
   PRIMARY KEY (txn_id),
-  FOREIGN KEY(flat_number) REFERENCES flat_maintenance_lookup
+  FOREIGN KEY(flat_number) REFERENCES flat_maintenance_lookup(flat_number) ON DELETE CASCADE
 );
 
 INSERT INTO maintenance_txn values(101,"007", "2020-05-06", "MAY", 2020, 4500, 0);
