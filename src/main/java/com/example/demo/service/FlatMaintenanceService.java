@@ -6,12 +6,14 @@ import com.example.demo.entity.FlatMaintenanceLookUp;
 import com.example.demo.entity.MaintenanceTxn;
 import com.example.demo.request.TxnRequest;
 import com.example.demo.response.TxnResponse;
+import com.example.demo.util.MaintenanceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class FlatMaintenanceService {
@@ -31,29 +33,37 @@ public class FlatMaintenanceService {
     }
 
     public List<MaintenanceTxn> getAllTransactions() {
-        return maintenanceTxnDAO.findAll();
+        return maintenanceTxnDAO.findAll(Sort.by(Sort.Direction.ASC, "flatNumber"));
     }
 
     @Transactional
     public TxnResponse addMaintenanceTxn(TxnRequest txnRequest) {
+        TxnResponse txnResponse = new TxnResponse();
         String flatNumber = txnRequest.getFlatNumber();
         Date txnDate = txnRequest.getTxnDate();
-        String currentMonth = txnRequest.getMonth();
-        String currentYear = txnRequest.getYear();
+        String currentMonth = txnRequest.getSelectedMonth();
+        String currentYear = txnRequest.getSelectedYear();
+        Double expectedMaintenance = txnRequest.getExpectedMaintenance();
         Double actualPayment = txnRequest.getActualPayment();
         String paymentMode = txnRequest.getPaymentMode();
 
         // Compute Balance
-        FlatMaintenanceLookUp flatData = flatMaintenanceLookUpDAO.getExpectedPaymentByFlatNumber(flatNumber);
-        Double expectedPayment = flatData.getExpectedMaintenance();
+        currentMonth = MaintenanceUtil.getMonthInString(Integer.valueOf(currentMonth) + 1);
+        // Check if entry for current month already exists
+        MaintenanceTxn txn = maintenanceTxnDAO.getTxn(currentMonth, currentYear, flatNumber);
+        if(null != txn) {
+            txnResponse.setMaintenanceTxn(txn);
+            txnResponse.setInfoMessage("Entry already exists !!");
+            return txnResponse;
+        }
 
-        String[] previousTime = getPreviousMonthYear(currentMonth, currentYear);
+        String[] previousTime = MaintenanceUtil.getPreviousMonthYear(currentMonth, currentYear);
         MaintenanceTxn previousTxn = maintenanceTxnDAO.getTxn(previousTime[0], previousTime[1], flatNumber);
         Double previousBalance = 0.0;
         if(null != previousTxn) {
             previousBalance = previousTxn.getBalance();
         }
-        Double balance = actualPayment - expectedPayment + previousBalance;
+        Double balance = actualPayment - expectedMaintenance + previousBalance;
         MaintenanceTxn maintenanceTxn = MaintenanceTxn.builder()
                 .flatNumber(flatNumber)
                 .txnDate(txnDate)
@@ -65,67 +75,40 @@ public class FlatMaintenanceService {
                 .build();
 
         // Insert the new txn
-        maintenanceTxn = maintenanceTxnDAO.save(maintenanceTxn);
-
-        TxnResponse txnResponse = new TxnResponse();
+        maintenanceTxnDAO.save(maintenanceTxn);
         txnResponse.setMaintenanceTxn(maintenanceTxn);
         return txnResponse;
     }
 
-    private String[] getPreviousMonthYear(String currentMonth, String currentYear) {
-        String previousMonth;
-        String previousYear = currentYear;
-        switch(currentMonth) {
-            case "JAN":
-                previousMonth = "DEC";
-                previousYear = String.valueOf(Integer.valueOf(currentYear) - 1);
-                break;
-            case "FEB":
-                previousMonth = "JAN";
-                break;
-            case "MAR":
-                previousMonth = "FEB";
-                break;
-            case "APR":
-                previousMonth = "MAR";
-                break;
-            case "MAY":
-                previousMonth = "APR";
-                break;
-            case "JUN":
-                previousMonth = "MAY";
-                break;
-            case "JUL":
-                previousMonth = "JUN";
-                break;
-            case "AUG":
-                previousMonth = "JUL";
-                break;
-            case "SEP":
-                previousMonth = "AUG";
-                break;
-            case "OCT":
-                previousMonth = "SEP";
-                break;
-            case "NOV":
-                previousMonth = "OCT";
-                break;
-            case "DEC":
-                previousMonth = "NOV";
-                break;
-            default:
-                previousMonth = currentMonth;
-                break;
-        }
-        return new String[] {previousMonth, previousYear};
-    }
-
     @Transactional
     public TxnResponse deleteTransaction(TxnRequest txnRequest) {
-        MaintenanceTxn txn = maintenanceTxnDAO.getTxn(txnRequest.getMonth(), txnRequest.getYear(), txnRequest.getFlatNumber());
+        MaintenanceTxn txn = maintenanceTxnDAO.getTxn(txnRequest.getSelectedMonth(), txnRequest.getSelectedYear(), txnRequest.getFlatNumber());
         maintenanceTxnDAO.delete(txn);
         TxnResponse txnResponse = new TxnResponse();
         txnResponse.setMaintenanceTxn(txn);
         return txnResponse;
+    }
+
+    public FlatMaintenanceLookUp getIndividualFlatData(String flatNumber) {
+        Optional<FlatMaintenanceLookUp> flatDataOptional = flatMaintenanceLookUpDAO.findById(flatNumber);
+        flatDataOptional.orElseThrow(RuntimeException::new);
+        return flatDataOptional.get();
+    }
+
+    public Map<String, List<FlatMaintenanceLookUp>> getPendingFlatsList(String month, String year) {
+        month = MaintenanceUtil.getMonthInString(Integer.valueOf(month));
+        List<FlatMaintenanceLookUp> pendingFlats = flatMaintenanceLookUpDAO.getPendingFlats(month, year);
+        Map<String, List<FlatMaintenanceLookUp>> result = new HashMap<>();
+        List<FlatMaintenanceLookUp> groundFloor = pendingFlats.stream().filter(flat -> flat.getFlatNumber().startsWith("0")).collect(Collectors.toList());
+        List<FlatMaintenanceLookUp> firstFloor = pendingFlats.stream().filter(flat -> flat.getFlatNumber().startsWith("1")).collect(Collectors.toList());
+        List<FlatMaintenanceLookUp> secondFloor = pendingFlats.stream().filter(flat -> flat.getFlatNumber().startsWith("2")).collect(Collectors.toList());
+        List<FlatMaintenanceLookUp> thirdFloor = pendingFlats.stream().filter(flat -> flat.getFlatNumber().startsWith("3")).collect(Collectors.toList());
+        List<FlatMaintenanceLookUp> fourthFloor = pendingFlats.stream().filter(flat -> flat.getFlatNumber().startsWith("4")).collect(Collectors.toList());
+        result.put("0", groundFloor);
+        result.put("1", firstFloor);
+        result.put("2", secondFloor);
+        result.put("3", thirdFloor);
+        result.put("4", fourthFloor);
+        return result;
     }
 }

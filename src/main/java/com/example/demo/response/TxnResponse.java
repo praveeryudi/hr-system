@@ -9,4 +9,5 @@ import lombok.Data;
 public class TxnResponse {
 
     private MaintenanceTxn maintenanceTxn;
+    private String infoMessage;
 }

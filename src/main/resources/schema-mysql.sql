@@ -54,19 +54,19 @@ COMMIT;*/
 INSERT INTO employee(empId,empName)values('emp003','emp3');*/
 
 /*  SRIVEN MAINTENANCE DB TABLES */
-DROP TABLE IF EXISTS maintenance_txn;
-DROP TABLE IF EXISTS flat_maintenance_lookup;
-commit;
+--DROP TABLE IF EXISTS maintenance_txn;
+--DROP TABLE IF EXISTS flat_maintenance_lookup;
+--commit;
 
-CREATE TABLE IF NOT EXISTS flat_maintenance_lookup (
+/*CREATE TABLE IF NOT EXISTS flat_maintenance_lookup (
   flat_number VARCHAR(10) NOT NULL,
   owner_name VARCHAR(200) NOT NULL,
   expected_maintenance DOUBLE,
   PRIMARY KEY (flat_number)
-);
+);*/
 
 -- Ground Floor Residents
-INSERT INTO flat_maintenance_lookup values('001','Abhishek Rathore', 4300);
+/*INSERT INTO flat_maintenance_lookup values('001','Abhishek Rathore', 4300);
 INSERT INTO flat_maintenance_lookup values('003','Priyansh Saxena', 4400);
 INSERT INTO flat_maintenance_lookup values('005','Kavya Sree', 4300);
 INSERT INTO flat_maintenance_lookup values('006','Anuradha Hazarika', 4300);
@@ -79,10 +79,10 @@ INSERT INTO flat_maintenance_lookup values('012','Jagadeesh', 4800);
 INSERT INTO flat_maintenance_lookup values('013','Sathish', 4300);
 INSERT INTO flat_maintenance_lookup values('014','Sohel Abdulajij Momin', 4300);
 INSERT INTO flat_maintenance_lookup values('015','Shekhar', 4150);
-INSERT INTO flat_maintenance_lookup values('016','Debashish Behera', 4300);
+INSERT INTO flat_maintenance_lookup values('016','Debashish Behera', 4300);*/
 
 -- 1st Floor residents
-INSERT INTO flat_maintenance_lookup values('101','Nilesh More', 4300);
+/*INSERT INTO flat_maintenance_lookup values('101','Nilesh More', 4300);
 INSERT INTO flat_maintenance_lookup values('102','Pradeepta Swain', 4800);
 INSERT INTO flat_maintenance_lookup values('103','Kaushik', 4400);
 INSERT INTO flat_maintenance_lookup values('104','Nirmal Paramban', 4800);
@@ -97,10 +97,10 @@ INSERT INTO flat_maintenance_lookup values('112','Ashish Jena', 4800);
 INSERT INTO flat_maintenance_lookup values('113','Indraneel Baul', 4300);
 INSERT INTO flat_maintenance_lookup values('114','Mahesh Gopalakrishnan', 4300);
 INSERT INTO flat_maintenance_lookup values('115','Ajith M', 4300);
-INSERT INTO flat_maintenance_lookup values('116','Deepak', 4300);
+INSERT INTO flat_maintenance_lookup values('116','Deepak', 4300);*/
 
 -- 2nd Floor residents
-INSERT INTO flat_maintenance_lookup values('201','Anurag Hathimare', 4300);
+/*INSERT INTO flat_maintenance_lookup values('201','Anurag Hathimare', 4300);
 INSERT INTO flat_maintenance_lookup values('202','Hardik', 4800);
 INSERT INTO flat_maintenance_lookup values('203','Smita Pattanaik', 4400);
 INSERT INTO flat_maintenance_lookup values('204','Dhivya Arumugam', 4800);
@@ -115,10 +115,10 @@ INSERT INTO flat_maintenance_lookup values('212','Lalatendu Das', 4800);
 INSERT INTO flat_maintenance_lookup values('213','Jeet Kaushik', 4300);
 INSERT INTO flat_maintenance_lookup values('214','Gurusiddesh Kudiker', 4300);
 INSERT INTO flat_maintenance_lookup values('215','Himanshu Gupta', 4300);
-INSERT INTO flat_maintenance_lookup values('216','Gopichand', 4300);
+INSERT INTO flat_maintenance_lookup values('216','Gopichand', 4300);*/
 
 -- 3rd Floor residents
-INSERT INTO flat_maintenance_lookup values('301','Chetan Yamger', 4300);
+/*INSERT INTO flat_maintenance_lookup values('301','Chetan Yamger', 4300);
 INSERT INTO flat_maintenance_lookup values('302','Piyush Jain', 4800);
 INSERT INTO flat_maintenance_lookup values('303','Sujit', 4400);
 INSERT INTO flat_maintenance_lookup values('304','Layeequr Rahman', 4800);
@@ -133,10 +133,10 @@ INSERT INTO flat_maintenance_lookup values('312','Vicknesh Ranganath', 4800);
 INSERT INTO flat_maintenance_lookup values('313','PR Gopal', 4300);
 INSERT INTO flat_maintenance_lookup values('314','Sitesh', 4300);
 INSERT INTO flat_maintenance_lookup values('315','Krishan Bhat', 4300);
-INSERT INTO flat_maintenance_lookup values('316','Dipayan Choudhury', 4300);
+INSERT INTO flat_maintenance_lookup values('316','Dipayan Choudhury', 4300);*/
 
 -- 4th Floor residents
-INSERT INTO flat_maintenance_lookup values('401','Rajkumar', 4300);
+/*INSERT INTO flat_maintenance_lookup values('401','Rajkumar', 4300);
 INSERT INTO flat_maintenance_lookup values('402','Ramesh', 4800);
 INSERT INTO flat_maintenance_lookup values('403','Shambu Suman', 4400);
 INSERT INTO flat_maintenance_lookup values('404','Satish Golukonda', 4800);
@@ -151,11 +151,11 @@ INSERT INTO flat_maintenance_lookup values('412','Ajay Dev', 4800);
 INSERT INTO flat_maintenance_lookup values('413','Mayank Gupta', 4300);
 INSERT INTO flat_maintenance_lookup values('414','Vivek Chabbi', 4300);
 INSERT INTO flat_maintenance_lookup values('415','Abhishek Srivastava', 4300);
-INSERT INTO flat_maintenance_lookup values('416','Jatin Bajaj', 4300);
+INSERT INTO flat_maintenance_lookup values('416','Jatin Bajaj', 4300);*/
 
-commit;
+--commit;
 
-CREATE TABLE IF NOT EXISTS maintenance_txn (
+/*CREATE TABLE IF NOT EXISTS maintenance_txn (
   txn_id BIGINT NOT NULL,
   flat_number VARCHAR(10) NOT NULL,
   txn_date DATE NOT NULL,
@@ -165,11 +165,11 @@ CREATE TABLE IF NOT EXISTS maintenance_txn (
   payment_mode VARCHAR(20) NOT NULL,
   balance DOUBLE,
   PRIMARY KEY (txn_id)
-);
+);*/
 
 --INSERT INTO maintenance_txn values(101,'007', '2020-05-06', 'MAY', '2020', 4500, 'CASH', 0);
 --INSERT INTO maintenance_txn values(102,'213', '2020-05-06', 'MAY', '2020', 4300, 'CASH', 0);
 
-commit;
+--commit;
 
 

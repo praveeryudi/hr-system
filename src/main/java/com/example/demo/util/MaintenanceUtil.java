@@ -1,0 +1,97 @@
+package com.example.demo.util;
+
+public class MaintenanceUtil {
+
+    private MaintenanceUtil(){}
+
+    public static String getMonthInString(int input) {
+        String month = null;
+        switch(input) {
+            case 1:
+                month = "JAN";
+                break;
+            case 2:
+                month = "FEB";
+                break;
+            case 3:
+                month = "MAR";
+                break;
+            case 4:
+                month = "APR";
+                break;
+            case 5:
+                month = "MAY";
+                break;
+            case 6:
+                month = "JUN";
+                break;
+            case 7:
+                month = "JUL";
+                break;
+            case 8:
+                month = "AUG";
+                break;
+            case 9:
+                month = "SEP";
+                break;
+            case 10:
+                month = "OCT";
+                break;
+            case 11:
+                month = "NOV";
+                break;
+            case 12:
+                month = "DEC";
+                break;
+        }
+        return month;
+    }
+
+    public static String[] getPreviousMonthYear(String currentMonth, String currentYear) {
+        String previousMonth;
+        String previousYear = currentYear;
+        switch(currentMonth) {
+            case "JAN":
+                previousMonth = "DEC";
+                previousYear = String.valueOf(Integer.valueOf(currentYear) - 1);
+                break;
+            case "FEB":
+                previousMonth = "JAN";
+                break;
+            case "MAR":
+                previousMonth = "FEB";
+                break;
+            case "APR":
+                previousMonth = "MAR";
+                break;
+            case "MAY":
+                previousMonth = "APR";
+                break;
+            case "JUN":
+                previousMonth = "MAY";
+                break;
+            case "JUL":
+                previousMonth = "JUN";
+                break;
+            case "AUG":
+                previousMonth = "JUL";
+                break;
+            case "SEP":
+                previousMonth = "AUG";
+                break;
+            case "OCT":
+                previousMonth = "SEP";
+                break;
+            case "NOV":
+                previousMonth = "OCT";
+                break;
+            case "DEC":
+                previousMonth = "NOV";
+                break;
+            default:
+                previousMonth = currentMonth;
+                break;
+        }
+        return new String[] {previousMonth, previousYear};
+    }
+}

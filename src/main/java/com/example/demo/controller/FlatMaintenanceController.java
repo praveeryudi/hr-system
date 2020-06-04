@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.request.TxnRequest;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -29,6 +30,13 @@ public class FlatMaintenanceController {
     @ResponseBody
     public List<FlatMaintenanceLookUp> getAllFlatLookupData() {
         return flatMaintenanceService.getAllFlatData();
+    }
+
+    @GetMapping(value = "/flat/{flatNumber}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public FlatMaintenanceLookUp getIndividualFlatLookup(@PathVariable final String flatNumber) {
+        return flatMaintenanceService.getIndividualFlatData(flatNumber);
     }
 
     @PostMapping(value = "/addMaintenance", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -51,4 +59,13 @@ public class FlatMaintenanceController {
     public List<MaintenanceTxn> getAllTransactions() {
         return flatMaintenanceService.getAllTransactions();
     }
+
+    @GetMapping(value = "/pending/{month}/{year}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Map<String, List<FlatMaintenanceLookUp>> getPendingFlatsList(@PathVariable final String month,
+                                                                        @PathVariable final String year) {
+        return flatMaintenanceService.getPendingFlatsList(month, year);
+    }
+
 }
