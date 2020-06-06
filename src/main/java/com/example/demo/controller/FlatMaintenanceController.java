@@ -46,6 +46,13 @@ public class FlatMaintenanceController {
         return flatMaintenanceService.addMaintenanceTxn(txnRequest);
     }
 
+    @PostMapping(value = "/addMaintenanceBatch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    public TxnResponse addTransactionInBatch(@RequestBody List<TxnRequest> txnRequestList) {
+        return flatMaintenanceService.addMaintenanceBatch(txnRequestList);
+    }
+
     @DeleteMapping(value = "/deleteTxn", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
