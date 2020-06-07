@@ -128,7 +128,6 @@ public class FlatMaintenanceService {
 
     @Transactional
     public TxnResponse deleteTransactions(List<Long> txnIds) {
-        //MaintenanceTxn txn = maintenanceTxnDAO.getTxn(txnRequest.getSelectedMonth(), txnRequest.getSelectedYear(), txnRequest.getFlatNumber());
         for(Long txnId : txnIds) {
             maintenanceTxnDAO.deleteById(txnId);
         }
