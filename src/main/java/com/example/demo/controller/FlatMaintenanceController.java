@@ -56,8 +56,8 @@ public class FlatMaintenanceController {
     @DeleteMapping(value = "/deleteTxn", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public TxnResponse deleteTxn(@RequestBody TxnRequest txnRequest) {
-        return flatMaintenanceService.deleteTransaction(txnRequest);
+    public TxnResponse deleteTransactions(@RequestBody List<Long> txnIds) {
+        return flatMaintenanceService.deleteTransactions(txnIds);
     }
 
     @GetMapping(value = "/transactions/all")

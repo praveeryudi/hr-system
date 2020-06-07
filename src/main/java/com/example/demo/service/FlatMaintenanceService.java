@@ -127,11 +127,13 @@ public class FlatMaintenanceService {
     }
 
     @Transactional
-    public TxnResponse deleteTransaction(TxnRequest txnRequest) {
-        MaintenanceTxn txn = maintenanceTxnDAO.getTxn(txnRequest.getSelectedMonth(), txnRequest.getSelectedYear(), txnRequest.getFlatNumber());
-        maintenanceTxnDAO.delete(txn);
+    public TxnResponse deleteTransactions(List<Long> txnIds) {
+        //MaintenanceTxn txn = maintenanceTxnDAO.getTxn(txnRequest.getSelectedMonth(), txnRequest.getSelectedYear(), txnRequest.getFlatNumber());
+        for(Long txnId : txnIds) {
+            maintenanceTxnDAO.deleteById(txnId);
+        }
         TxnResponse txnResponse = new TxnResponse();
-        txnResponse.setMaintenanceTxn(txn);
+        txnResponse.setInfoMessage(txnIds.size() + " transactions deleted");
         return txnResponse;
     }
 
