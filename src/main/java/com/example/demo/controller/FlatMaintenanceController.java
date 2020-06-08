@@ -16,6 +16,7 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(value = "/maintenance")
+@Api(value="maintenance", description = "Data service operations on maintenance collection", tags=("maintenance"))
 public class FlatMaintenanceController {
 
     private final FlatMaintenanceService flatMaintenanceService;
@@ -28,6 +29,7 @@ public class FlatMaintenanceController {
     @GetMapping(value = "/lookup")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
+    @ApiOperation(value="Get Flat Master Data", notes="Gets master data for all flats", nickname="getLookupData")
     public List<FlatMaintenanceLookUp> getAllFlatLookupData() {
         return flatMaintenanceService.getAllFlatData();
     }
