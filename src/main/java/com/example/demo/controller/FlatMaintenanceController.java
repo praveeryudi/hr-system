@@ -4,6 +4,8 @@ import com.example.demo.entity.FlatMaintenanceLookUp;
 import com.example.demo.entity.MaintenanceTxn;
 import com.example.demo.response.TxnResponse;
 import com.example.demo.service.FlatMaintenanceService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,7 +18,7 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(value = "/maintenance")
-@Api(value="maintenance", description = "Data service operations on maintenance collection", tags=("maintenance"))
+@Api(value="maintenance", tags=("maintenance"))
 public class FlatMaintenanceController {
 
     private final FlatMaintenanceService flatMaintenanceService;
@@ -29,7 +31,11 @@ public class FlatMaintenanceController {
     @GetMapping(value = "/lookup")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    @ApiOperation(value="Get Flat Master Data", notes="Gets master data for all flats", nickname="getLookupData")
+    @ApiOperation(value="Get Flat Master Data",
+            notes="Gets master data for all flats",
+            response = FlatMaintenanceLookUp.class,
+            responseContainer = "List",
+            nickname="getLookupData")
     public List<FlatMaintenanceLookUp> getAllFlatLookupData() {
         return flatMaintenanceService.getAllFlatData();
     }
