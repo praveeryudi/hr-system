@@ -75,7 +75,7 @@ public class FlatMaintenanceService {
                 .build();
 
         // Insert the new txn
-        maintenanceTxnDAO.save(maintenanceTxn);
+        maintenanceTxnDAO.saveAndFlush(maintenanceTxn);
         txnResponse.setMaintenanceTxn(maintenanceTxn);
         txnResponse.setInfoMessage("Record Saved !!");
         return txnResponse;

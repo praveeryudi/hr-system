@@ -71,6 +71,11 @@ public class FlatMaintenanceController {
     @GetMapping(value = "/transactions/all")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
+    @ApiOperation(value="Gets All Maintenance transactions",
+            notes="Gets All Maintenance transactions",
+            response = MaintenanceTxn.class,
+            responseContainer = "List",
+            nickname="getAllTransactions")
     public List<MaintenanceTxn> getAllTransactions() {
         return flatMaintenanceService.getAllTransactions();
     }

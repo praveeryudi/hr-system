@@ -11,9 +11,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 		FlatMaintenanceLookUpDAO.class,
 		MaintenanceTxnDAO.class
 })
-public class ExceptionApplication {
+public class MaintenanceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ExceptionApplication.class, args);
+		SpringApplication.run(MaintenanceApplication.class, args);
 	}
 }
