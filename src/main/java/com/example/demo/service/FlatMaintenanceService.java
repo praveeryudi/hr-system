@@ -89,19 +89,19 @@ public class FlatMaintenanceService {
         int rowsAdded = 0;
         for(TxnRequest txnRequest : txnRequestList) {
             String flatNumber = txnRequest.getFlatNumber();
-            Date txnDate = txnRequest.getTxnDate();
             String currentMonth = txnRequest.getSelectedMonth();
             String currentYear = txnRequest.getSelectedYear();
-            Double expectedMaintenance = txnRequest.getExpectedMaintenance();
+            MaintenanceTxn txn = maintenanceTxnDAO.getTxn(currentMonth, currentYear, flatNumber);
+            if(null != txn) {
+                continue;
+            }
             Double actualPayment = txnRequest.getActualPayment();
             String paymentMode = txnRequest.getPaymentMode();
             // Compute Balance
             //currentMonth = MaintenanceUtil.getMonthInString(Integer.valueOf(currentMonth) + 1);
             // Check if entry for current month already exists
-            MaintenanceTxn txn = maintenanceTxnDAO.getTxn(currentMonth, currentYear, flatNumber);
-            if(null != txn) {
-                continue;
-            }
+            Date txnDate = txnRequest.getTxnDate();
+            Double expectedMaintenance = flatMaintenanceLookUpDAO.getExpectedPaymentByFlatNumber(flatNumber).getExpectedMaintenance();
             String[] previousTime = MaintenanceUtil.getPreviousMonthYear(currentMonth, currentYear);
             MaintenanceTxn previousTxn = maintenanceTxnDAO.getTxn(previousTime[0], previousTime[1], flatNumber);
             Double previousBalance = 0.0;
