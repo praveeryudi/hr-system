@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.dao.FlatMaintenanceLookUpDAO;
+import com.example.demo.dao.MaintenanceTxnDAO;
 import com.example.demo.entity.FlatMaintenanceLookUp;
 import com.example.demo.service.FlatMaintenanceService;
 import org.junit.Test;
@@ -8,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
@@ -23,15 +23,16 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles(profiles = "dev")
-@DataJpaTest
 public class MaintenanceApplicationTests {
 
 	private static final Logger log = LoggerFactory.getLogger(MaintenanceApplicationTests.class);
 
-	@Autowired
-	private FlatMaintenanceService flatMaintenanceService;
 	@MockBean
 	private FlatMaintenanceLookUpDAO flatMaintenanceLookUpDAO;
+	@MockBean
+	private MaintenanceTxnDAO maintenanceTxnDAO;
+	@Autowired
+	private FlatMaintenanceService flatMaintenanceService;
 
 	@Test
 	public void testFlatLookup() throws Exception {
