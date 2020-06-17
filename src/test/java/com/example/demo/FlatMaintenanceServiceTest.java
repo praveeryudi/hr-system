@@ -5,6 +5,7 @@ import com.example.demo.dao.MaintenanceTxnDAO;
 import com.example.demo.entity.FlatMaintenanceLookUp;
 import com.example.demo.entity.MaintenanceTxn;
 import com.example.demo.service.FlatMaintenanceService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -36,6 +37,8 @@ public class FlatMaintenanceServiceTest {
 	private MaintenanceTxnDAO maintenanceTxnDAO;
 	@Autowired
 	private FlatMaintenanceService flatMaintenanceService;
+	@MockBean
+	private FlatMaintenanceLookUp flatMaintenanceLookUp;
 
 	@Test
 	public void testFlatLookup() throws Exception {
@@ -53,6 +56,16 @@ public class FlatMaintenanceServiceTest {
 		log.info("unit testing service getAllTransactions()...");
 		when(maintenanceTxnDAO.findAll(Sort.by(Sort.Direction.ASC, "flatNumber"))).thenReturn(getAllTransactionsMockReturn());
 		assertEquals(3, flatMaintenanceService.getAllTransactions().size());
+	}
+
+	@Test
+	public void getIndividualFlatDataTest() {
+		log.info("unit testing service getIndividualFlatData()...");
+		flatMaintenanceLookUp.setFlatNumber("1002");
+		flatMaintenanceLookUp.setExpectedMaintenance(430.0);
+		flatMaintenanceLookUp.setOwnerName("TestXXX");
+		when(flatMaintenanceLookUpDAO.findById("1002")).thenReturn(java.util.Optional.ofNullable(flatMaintenanceLookUp));
+		Assert.assertNotNull(flatMaintenanceLookUp);
 	}
 
 	private List<FlatMaintenanceLookUp> getAllFlatDataMockReturn() {
