@@ -6,7 +6,7 @@ jdk:
 before_install:
   - git update-index --chmod=+x mvnw
 
-install: ./mvnw clean install -DskipTests=true
+install: ./mvnw install -DskipTests=true
 
 notifications:
   email: praveer.das@dish.com
