@@ -6,7 +6,9 @@ jdk:
 before_install:
   - git update-index --chmod=+x mvnw
 
-install: ./mvnw install -DskipTests=true
+install:
+  - mvn -N io.takari:maven:wrapper
+  - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 notifications:
   email: praveer.das@dish.com
