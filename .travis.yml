@@ -8,7 +8,7 @@ before_install:
 
 install:
   - mvn -N io.takari:maven:wrapper
-  - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - ./mvnw install -Dmaven.javadoc.skip=true -B -V
 
 notifications:
-  email: praveer.das@dish.com
+  email: praveeryudi@gmail.com
