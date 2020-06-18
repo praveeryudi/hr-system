@@ -10,5 +10,15 @@ install:
   - mvn -N io.takari:maven:wrapper
   - ./mvnw install -Dmaven.javadoc.skip=true -B -V
 
+deploy:
+  provider: cloudfoundry
+  username: praveeryudi@gmail.com
+  password: $PCF_TOKEN
+  api: https://api.run.pivotal.io
+  organization: praveeryudi-org
+  space: development
+  manifest: manifest.yml
+  app_name: praveeryudi-org
+
 notifications:
   email: praveeryudi@gmail.com
