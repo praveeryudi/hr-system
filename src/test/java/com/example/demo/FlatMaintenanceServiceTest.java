@@ -8,6 +8,7 @@ import com.example.demo.service.FlatMaintenanceService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +16,22 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ContextConfiguration(loader= AnnotationConfigContextLoader.class, classes = FlatMaintenanceService.class)
 @ActiveProfiles(profiles = "dev")
 public class FlatMaintenanceServiceTest {
 
@@ -41,14 +47,11 @@ public class FlatMaintenanceServiceTest {
 	private FlatMaintenanceLookUp flatMaintenanceLookUp;
 
 	@Test
-	public void testFlatLookup() throws Exception {
+	public void testFlatLookup() {
 
 		log.info("unit testing service getAllFlatData()...");
 		when(flatMaintenanceLookUpDAO.findAll()).thenReturn(getAllFlatDataMockReturn());
 		assertEquals(2, flatMaintenanceService.getAllFlatData().size());
-		/*mockMvc.perform(get("/maintenance/lookup"))
-				.andDo(print())
-				.andExpect(status().isOk());*/
 	}
 
 	@Test
@@ -59,13 +62,22 @@ public class FlatMaintenanceServiceTest {
 	}
 
 	@Test
-	public void getIndividualFlatDataTest() {
-		log.info("unit testing service getIndividualFlatData()...");
+	public void testGetIndividualFlatData() {
+		log.info("unit testing service method getIndividualFlatData()...");
 		flatMaintenanceLookUp.setFlatNumber("1002");
 		flatMaintenanceLookUp.setExpectedMaintenance(430.0);
 		flatMaintenanceLookUp.setOwnerName("TestXXX");
 		when(flatMaintenanceLookUpDAO.findById("1002")).thenReturn(java.util.Optional.ofNullable(flatMaintenanceLookUp));
 		Assert.assertNotNull(flatMaintenanceLookUp);
+	}
+
+	@Test
+	public void testDeleteTransactions() {
+		log.info("unit testing service method deleteTransactions()...");
+		List<Long> txnIds = Stream.of(10L, 12L, 20L).collect(Collectors.toList());
+		doNothing().when(maintenanceTxnDAO).deleteById(Mockito.anyLong());
+		flatMaintenanceService.deleteTransactions(txnIds);
+		verify(maintenanceTxnDAO, times(txnIds.size())).deleteById(Mockito.anyLong());
 	}
 
 	private List<FlatMaintenanceLookUp> getAllFlatDataMockReturn() {
