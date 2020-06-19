@@ -2,7 +2,12 @@ package com.example.demo;
 
 import com.example.demo.controller.FlatMaintenanceController;
 import com.example.demo.entity.FlatMaintenanceLookUp;
+import com.example.demo.entity.MaintenanceTxn;
+import com.example.demo.request.TxnRequest;
+import com.example.demo.response.TxnResponse;
 import com.example.demo.service.FlatMaintenanceService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,17 +16,21 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -66,6 +75,40 @@ public class FlatMaintenanceControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         verify(flatMaintenanceService, atMost(1)).getIndividualFlatData(Mockito.any());
+    }
+
+    @Test
+    public void testAddTransaction() throws Exception {
+
+        TxnRequest txnRequest = new TxnRequest();
+        txnRequest.setTxnDate(new Date());
+        txnRequest.setFlatNumber("testXXX");
+        txnRequest.setActualPayment(10.0);
+        txnRequest.setExpectedMaintenance(100.0);
+        txnRequest.setPaymentMode("CASH");
+        txnRequest.setSelectedMonth("JUN");
+        txnRequest.setSelectedYear("2020");
+
+        MaintenanceTxn maintenanceTxn = new MaintenanceTxn();
+        TxnResponse txnResponse = new TxnResponse();
+        txnResponse.setMaintenanceTxn(maintenanceTxn);
+        txnResponse.setInfoMessage("Transaction saved via test");
+        when(flatMaintenanceService.addMaintenanceTxn( any() )).thenReturn(txnResponse);
+
+        MvcResult mvcResult = mockMvc.perform(post("/maintenance/addMaintenance")
+                .content(asJsonString(txnRequest))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andReturn();
+        assertEquals(HttpStatus.CREATED.value(), mvcResult.getResponse().getStatus());
+        assertEquals(MediaType.APPLICATION_JSON_UTF8_VALUE, mvcResult.getResponse().getContentType());
+    }
+
+    private String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS).writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private List<FlatMaintenanceLookUp> getAllFlatDataMockReturn() {
