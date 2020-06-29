@@ -1,3 +1,19 @@
+DROP TABLE IF EXISTS oc_fee;
+commit;
+
+CREATE TABLE oc_fee (
+  fee_id BIGINT NOT NULL,
+  flat_number VARCHAR(10) NOT NULL,
+  actual_payment DOUBLE,
+  payment_mode VARCHAR(20) NOT NULL,
+  PRIMARY KEY (fee_id)
+);
+
+INSERT INTO oc_fee values(1,'307', 10000, 'Gpay');
+INSERT INTO oc_fee values(2,'216', 10000, 'Gpay');
+
+COMMIT;
+
 --  SRIVEN MAINTENANCE DB TABLES
 --DROP TABLE IF EXISTS maintenance_txn;
 --DROP TABLE IF EXISTS flat_maintenance_lookup;
