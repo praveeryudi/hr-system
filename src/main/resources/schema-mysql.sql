@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS oc_fee;
+/*DROP TABLE IF EXISTS oc_fee;
 commit;
 
 CREATE TABLE oc_fee (
@@ -12,7 +12,7 @@ CREATE TABLE oc_fee (
 INSERT INTO oc_fee values(1,'307', 10000, 'Gpay');
 INSERT INTO oc_fee values(2,'216', 10000, 'Gpay');
 
-COMMIT;
+COMMIT;*/
 
 --  SRIVEN MAINTENANCE DB TABLES
 --DROP TABLE IF EXISTS maintenance_txn;
