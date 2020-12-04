@@ -7,6 +7,7 @@ import com.example.demo.entity.MaintenanceTxn;
 import com.example.demo.request.TxnRequest;
 import com.example.demo.response.TxnResponse;
 import com.example.demo.util.MaintenanceUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class FlatMaintenanceService {
 
     private final FlatMaintenanceLookUpDAO flatMaintenanceLookUpDAO;
@@ -160,11 +162,13 @@ public class FlatMaintenanceService {
     }
 
     public Map<String, Double> getFloorWiseTotal(String month, String year) {
+        month = MaintenanceUtil.getMonthInString(Integer.valueOf(month));
         Map<String, Double> result = new LinkedHashMap<>();
         for(int floor = 0; floor <= 4; floor++) {
             Double total = maintenanceTxnDAO.getGroundFloorMaintenance(month, year, String.valueOf(floor));
             result.put(String.valueOf(floor), total);
         }
+        log.info("Floor wise totals {}", result);
         return result;
     }
 }

@@ -12,7 +12,7 @@ public interface MaintenanceTxnDAO extends JpaRepository<MaintenanceTxn, Long> {
     @Query(value = "SELECT mt from MaintenanceTxn mt where mt.month = ?1 AND mt.year = ?2 AND mt.flatNumber = ?3")
     MaintenanceTxn getTxn(String previousMonth, String year, String flatNumber);
 
-    @Query(value = "select sum(actual_payment) from maintenance_txn where month = :month and year = :year and flat_number like :floor%", nativeQuery = true)
+    @Query(value = "select sum(actual_payment) from maintenance_txn where month = :month and year = :year and flat_number like CONCAT(:floor,'%')", nativeQuery = true)
     Double getGroundFloorMaintenance(@Param(value = "month") String month,
                                      @Param(value = "year") String year,
                                      @Param(value = "floor") String floor);
