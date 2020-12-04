@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.FlatMaintenanceLookUp;
 import com.example.demo.entity.MaintenanceTxn;
+import com.example.demo.request.TxnRequest;
 import com.example.demo.response.TxnResponse;
 import com.example.demo.service.FlatMaintenanceService;
 import io.swagger.annotations.Api;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.request.TxnRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -86,6 +86,18 @@ public class FlatMaintenanceController {
     public Map<String, List<FlatMaintenanceLookUp>> getPendingFlatsList(@PathVariable final String month,
                                                                         @PathVariable final String year) {
         return flatMaintenanceService.getPendingFlatsList(month, year);
+    }
+
+    @GetMapping(value = "/floorTotal/{month}/{year}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    @ApiOperation(value="Gets floor wise totals",
+            notes="Gets floor wise totals",
+            response = Map.class,
+            nickname="getFloorWiseTotal")
+    public Map<String, Double> getFloorWiseTotal(@PathVariable final String month,
+                                                 @PathVariable final String year) {
+        return flatMaintenanceService.getFloorWiseTotal(month, year);
     }
 
 }

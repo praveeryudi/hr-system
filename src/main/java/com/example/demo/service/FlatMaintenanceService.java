@@ -158,4 +158,13 @@ public class FlatMaintenanceService {
         result.put("4", fourthFloor);
         return result;
     }
+
+    public Map<String, Double> getFloorWiseTotal(String month, String year) {
+        Map<String, Double> result = new LinkedHashMap<>();
+        for(int floor = 0; floor <= 4; floor++) {
+            Double total = maintenanceTxnDAO.getGroundFloorMaintenance(month, year, String.valueOf(floor));
+            result.put(String.valueOf(floor), total);
+        }
+        return result;
+    }
 }

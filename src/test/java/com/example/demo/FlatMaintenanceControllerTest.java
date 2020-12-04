@@ -8,6 +8,7 @@ import com.example.demo.response.TxnResponse;
 import com.example.demo.service.FlatMaintenanceService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,9 +25,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -37,9 +36,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({FlatMaintenanceController.class, FlatMaintenanceService.class})
 @ActiveProfiles(profiles = "dev")
+@Slf4j
 public class FlatMaintenanceControllerTest {
-
-    private static final Logger log = LoggerFactory.getLogger(FlatMaintenanceControllerTest.class);
 
     private MockMvc mockMvc;
     private FlatMaintenanceService flatMaintenanceService;
@@ -75,6 +73,22 @@ public class FlatMaintenanceControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         verify(flatMaintenanceService, atMost(1)).getIndividualFlatData(Mockito.any());
+    }
+
+    @Test
+    public void testGetFloorWiseTotal() throws Exception {
+        log.info("unit testing controller method getFloorWiseTotal()...");
+        Map<String, Double> totalMap = new LinkedHashMap<>();
+        totalMap.put("0", 100.0);
+        totalMap.put("1", 100.0);
+        totalMap.put("2", 100.0);
+        totalMap.put("3", 100.0);
+        totalMap.put("4", 100.0);
+
+        when(flatMaintenanceService.getFloorWiseTotal(anyString(), anyString())).thenReturn(totalMap);
+        mockMvc.perform(MockMvcRequestBuilders.get("/maintenance/floorTotal/5/2020"))
+                .andExpect(status().isOk());
+        verify(flatMaintenanceService, atMost(1)).getFloorWiseTotal(anyString(), anyString());
     }
 
     @Test
