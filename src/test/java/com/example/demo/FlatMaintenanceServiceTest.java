@@ -5,12 +5,11 @@ import com.example.demo.dao.MaintenanceTxnDAO;
 import com.example.demo.entity.FlatMaintenanceLookUp;
 import com.example.demo.entity.MaintenanceTxn;
 import com.example.demo.service.FlatMaintenanceService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,9 +32,8 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @ContextConfiguration(loader= AnnotationConfigContextLoader.class, classes = FlatMaintenanceService.class)
 @ActiveProfiles(profiles = "dev")
+@Slf4j
 public class FlatMaintenanceServiceTest {
-
-	private static final Logger log = LoggerFactory.getLogger(FlatMaintenanceServiceTest.class);
 
 	@MockBean
 	private FlatMaintenanceLookUpDAO flatMaintenanceLookUpDAO;

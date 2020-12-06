@@ -1,18 +1,16 @@
 package com.example.demo.advice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
+@Slf4j
 public class LoggingAdvice {
-
-    private Logger log = LoggerFactory.getLogger(LoggingAdvice.class);
 
     @Around("@annotation(com.example.demo.annotation.LogMethodExecution)")
     public Object logMethod(ProceedingJoinPoint pjp) throws Throwable {

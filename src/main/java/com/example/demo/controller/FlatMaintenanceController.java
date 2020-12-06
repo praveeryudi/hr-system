@@ -18,7 +18,7 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(value = "/maintenance")
-@Api(value="maintenance", tags=("maintenance"))
+@Api(value = "maintenance", tags = "maintenance")
 public class FlatMaintenanceController {
 
     private final FlatMaintenanceService flatMaintenanceService;
@@ -31,11 +31,11 @@ public class FlatMaintenanceController {
     @GetMapping(value = "/lookup")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    @ApiOperation(value="Get Flat Master Data",
-            notes="Gets master data for all flats",
+    @ApiOperation(value = "Get Flat Master Data",
+            notes = "Gets master data for all flats",
             response = FlatMaintenanceLookUp.class,
             responseContainer = "List",
-            nickname="getLookupData")
+            nickname = "getLookupData")
     public List<FlatMaintenanceLookUp> getAllFlatLookupData() {
         return flatMaintenanceService.getAllFlatData();
     }
@@ -71,11 +71,11 @@ public class FlatMaintenanceController {
     @GetMapping(value = "/transactions/all")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    @ApiOperation(value="Gets All Maintenance transactions",
-            notes="Gets All Maintenance transactions",
+    @ApiOperation(value = "Gets All Maintenance transactions",
+            notes = "Gets All Maintenance transactions",
             response = MaintenanceTxn.class,
             responseContainer = "List",
-            nickname="getAllTransactions")
+            nickname = "getAllTransactions")
     public List<MaintenanceTxn> getAllTransactions() {
         return flatMaintenanceService.getAllTransactions();
     }
@@ -91,10 +91,10 @@ public class FlatMaintenanceController {
     @GetMapping(value = "/floorTotal/{month}/{year}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    @ApiOperation(value="Gets floor wise totals",
-            notes="Gets floor wise totals",
+    @ApiOperation(value = "Gets floor wise totals",
+            notes = "Gets floor wise totals",
             response = Map.class,
-            nickname="getFloorWiseTotal")
+            nickname = "getFloorWiseTotal")
     public Map<String, Double> getFloorWiseTotal(@PathVariable final String month,
                                                  @PathVariable final String year) {
         return flatMaintenanceService.getFloorWiseTotal(month, year);
