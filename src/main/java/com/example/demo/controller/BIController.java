@@ -4,6 +4,7 @@ import com.example.demo.service.BIService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.Map;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(value = "/bi")
 @Api(value = "BI", tags = "BI")
+@Slf4j
 public class BIController {
 
     private final BIService BIService;
@@ -32,6 +34,7 @@ public class BIController {
     public Map<String, Double> getDataForSelectedPeriod(
             @ApiParam(name = "duration", required = true, allowableValues = "3,6,9,12", type = "string")
             @PathVariable(value = "duration") final String duration) {
+        log.info("Duration Selected: {}", duration);
         return BIService.getMonthsList(duration);
     }
 

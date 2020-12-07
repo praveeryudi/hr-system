@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.example.demo.util.MaintenanceUtil.get6MonthsQuery;
+import static com.example.demo.util.MaintenanceUtil.*;
 
 @Repository
 @Slf4j
@@ -30,10 +30,25 @@ public class MonthYearRepository {
         Connection conn = null;
         PreparedStatement pStmt = null;
         ResultSet resultSet = null;
+        String sql = null;
+        switch(timePeriod) {
+            case "3":
+                sql = get3MonthsQuery();
+                break;
+
+            case "6":
+                sql = get6MonthsQuery();
+                break;
+
+            case "9":
+                sql = get12MonthsQuery();
+                break;
+        }
+
         List<MonthYear> monthYearList = new ArrayList<>();
         try {
             conn = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
-            pStmt = conn.prepareStatement(get6MonthsQuery());
+            pStmt = conn.prepareStatement(sql);
             resultSet = pStmt.executeQuery();
             MonthYear monthYear;
             while(resultSet.next()) {
