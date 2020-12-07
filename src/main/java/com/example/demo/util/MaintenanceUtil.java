@@ -94,4 +94,18 @@ public class MaintenanceUtil {
         }
         return new String[] {previousMonth, previousYear};
     }
+
+    public static String get6MonthsQuery() {
+        return "SELECT monthname(CURDATE() - INTERVAL 6 MONTH) as Month, year(CURDATE() - INTERVAL 6 MONTH) as Year\n" +
+                "UNION\n" +
+                "SELECT monthname(CURDATE() - INTERVAL 5 MONTH) as Month, year(CURDATE() - INTERVAL 5 MONTH) as Year\n" +
+                "UNION\n" +
+                "SELECT monthname(CURDATE() - INTERVAL 4 MONTH) as Month, year(CURDATE() - INTERVAL 4 MONTH) as Year\n" +
+                "UNION\n" +
+                "SELECT monthname(CURDATE() - INTERVAL 3 MONTH) as Month, year(CURDATE() - INTERVAL 3 MONTH) as Year\n" +
+                "UNION\n" +
+                "SELECT monthname(CURDATE() - INTERVAL 2 MONTH) as Month, year(CURDATE() - INTERVAL 2 MONTH) as Year\n" +
+                "UNION\n" +
+                "SELECT monthname(CURDATE() - INTERVAL 1 MONTH) as Month, year(CURDATE() - interval 1 month ) as year";
+    }
 }

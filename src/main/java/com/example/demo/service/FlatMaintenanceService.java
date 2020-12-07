@@ -165,7 +165,7 @@ public class FlatMaintenanceService {
         month = MaintenanceUtil.getMonthInString(Integer.valueOf(month));
         Map<String, Double> result = new LinkedHashMap<>();
         for(int floor = 0; floor <= 4; floor++) {
-            Double total = maintenanceTxnDAO.getGroundFloorMaintenance(month, year, String.valueOf(floor));
+            Double total = maintenanceTxnDAO.getFloorWiseMaintenance(month, year, String.valueOf(floor));
             result.put(String.valueOf(floor), total);
         }
         log.info("Floor wise totals {}", result);
