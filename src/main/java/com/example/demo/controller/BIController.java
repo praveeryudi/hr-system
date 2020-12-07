@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.service.BIService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,9 @@ public class BIController {
             nickname = "getDataForSelectedPeriod")
     @GetMapping(value = "/periodData/{duration}")
     @ResponseStatus(HttpStatus.OK)
-    public Map<String, Double> getDataForSelectedPeriod(@PathVariable(value = "duration") final String duration) {
+    public Map<String, Double> getDataForSelectedPeriod(
+            @ApiParam(name = "duration", required = true, allowableValues = "3,6,9,12", type = "string")
+            @PathVariable(value = "duration") final String duration) {
         return BIService.getMonthsList(duration);
     }
 
