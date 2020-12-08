@@ -35,7 +35,7 @@ public class BIController {
             @ApiParam(name = "duration", required = true, allowableValues = "3,6,9,12", type = "string")
             @PathVariable(value = "duration") final String duration) {
         log.info("Duration Selected: {}", duration);
-        return BIService.getMonthsList(duration);
+        return BIService.getSelectedDurationData(duration);
     }
 
 }

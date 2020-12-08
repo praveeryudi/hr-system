@@ -28,7 +28,7 @@ public class BIService {
         this.maintenanceTxnDAO = maintenanceTxnDAO;
     }
 
-    public Map<String, Double> getMonthsList(String timePeriod) {
+    public Map<String, Double> getSelectedDurationData(String timePeriod) {
         List<MonthYear> monthYearList = monthYearRepository.getMonthsList(timePeriod);
         log.info("Month Years Retrieved = {}", monthYearList);
         List<String> allMonths = monthYearList.stream().map(MonthYear::getMonth).collect(Collectors.toList());
@@ -36,10 +36,12 @@ public class BIService {
         List<PaymentSum> totalPayments = maintenanceTxnDAO.sumActualPaymentByMonthYear(allMonths, allYears);
         log.info("{}", totalPayments);
         final Map<String, Double> aggregatePayments = new LinkedHashMap<>();
+        aggregatePayments.put("DurationTotal", totalPayments.stream().mapToDouble(PaymentSum::getPaymentTotal).sum());
         totalPayments.forEach(agg -> {
             String key = agg.getMonth() + "," + agg.getYear();
             aggregatePayments.put(key, agg.getPaymentTotal());
         });
+
         return aggregatePayments;
     }
 
