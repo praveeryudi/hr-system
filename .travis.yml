@@ -10,6 +10,9 @@ install:
   - mvn -N io.takari:maven:wrapper
   - ./mvnw install -Dmaven.javadoc.skip=true -B -V
 
+after_install:
+  - cp /target/boot-app.jar D:/Personal Projects/MaintenanceAppJar/
+
 #deploy:
 #  provider: cloudfoundry
 #  username: praveeryudi@gmail.com
