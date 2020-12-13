@@ -41,6 +41,10 @@ public class MonthYearRepository {
                 break;
 
             case "9":
+                sql = get9MonthsQuery();
+                break;
+
+            case "12":
                 sql = get12MonthsQuery();
                 break;
         }
