@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.FlatMaintenanceLookUp;
 import com.example.demo.entity.MaintenanceTxn;
+import com.example.demo.pojo.ClearFromBalance;
 import com.example.demo.request.TxnRequest;
 import com.example.demo.response.TxnResponse;
 import com.example.demo.service.FlatMaintenanceService;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,13 +56,6 @@ public class FlatMaintenanceController {
         return flatMaintenanceService.addMaintenanceTxn(txnRequest);
     }
 
-    @PostMapping(value = "/addMaintenanceBatch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @ResponseStatus(HttpStatus.CREATED)
-    public TxnResponse addTransactionInBatch(@RequestBody List<TxnRequest> txnRequestList) {
-        return flatMaintenanceService.addMaintenanceBatch(txnRequestList);
-    }
-
     @DeleteMapping(value = "/deleteTxn", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
@@ -86,6 +81,18 @@ public class FlatMaintenanceController {
     public Map<String, List<FlatMaintenanceLookUp>> getPendingFlatsList(@PathVariable final String month,
                                                                         @PathVariable final String year) {
         return flatMaintenanceService.getPendingFlatsList(month, year);
+    }
+
+    @PostMapping(value = "/adjustFromBalance")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    @ApiOperation(value = "Adjust maintenance from balance",
+            notes = "Adjust maintenance from balance",
+            response = ResponseEntity.class,
+            nickname = "adjustFromBalance")
+    public ResponseEntity<String> adjustFromBalance(@RequestBody ClearFromBalance clearFromBalance) {
+        String response = flatMaintenanceService.clearFromBalance(clearFromBalance);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(value = "/floorTotal/{month}/{year}")

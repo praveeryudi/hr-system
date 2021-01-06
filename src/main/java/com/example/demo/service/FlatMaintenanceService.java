@@ -4,6 +4,7 @@ import com.example.demo.dao.FlatMaintenanceLookUpDAO;
 import com.example.demo.dao.MaintenanceTxnDAO;
 import com.example.demo.entity.FlatMaintenanceLookUp;
 import com.example.demo.entity.MaintenanceTxn;
+import com.example.demo.pojo.ClearFromBalance;
 import com.example.demo.request.TxnRequest;
 import com.example.demo.response.TxnResponse;
 import com.example.demo.util.MaintenanceUtil;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.example.demo.util.MaintenanceUtil.getPreviousMonthYear;
 
 @Service
 @Slf4j
@@ -84,51 +87,6 @@ public class FlatMaintenanceService {
     }
 
     @Transactional
-    public TxnResponse addMaintenanceBatch(List<TxnRequest> txnRequestList) {
-        TxnResponse txnResponse = new TxnResponse();
-
-        List<MaintenanceTxn> txnList = new ArrayList<>();
-        int rowsAdded = 0;
-        for(TxnRequest txnRequest : txnRequestList) {
-            String flatNumber = txnRequest.getFlatNumber();
-            String currentMonth = txnRequest.getSelectedMonth();
-            String currentYear = txnRequest.getSelectedYear();
-            MaintenanceTxn txn = maintenanceTxnDAO.getTxn(currentMonth, currentYear, flatNumber);
-            if(null != txn) {
-                continue;
-            }
-            Double actualPayment = txnRequest.getActualPayment();
-            String paymentMode = txnRequest.getPaymentMode();
-            // Compute Balance
-            //currentMonth = MaintenanceUtil.getMonthInString(Integer.valueOf(currentMonth) + 1);
-            // Check if entry for current month already exists
-            Date txnDate = txnRequest.getTxnDate();
-            Double expectedMaintenance = flatMaintenanceLookUpDAO.getExpectedPaymentByFlatNumber(flatNumber).getExpectedMaintenance();
-            String[] previousTime = MaintenanceUtil.getPreviousMonthYear(currentMonth, currentYear);
-            MaintenanceTxn previousTxn = maintenanceTxnDAO.getTxn(previousTime[0], previousTime[1], flatNumber);
-            Double previousBalance = 0.0;
-            if(null != previousTxn) {
-                previousBalance = previousTxn.getBalance();
-            }
-            Double balance = actualPayment - expectedMaintenance + previousBalance;
-            MaintenanceTxn maintenanceTxn = MaintenanceTxn.builder()
-                    .flatNumber(flatNumber)
-                    .txnDate(txnDate)
-                    .month(currentMonth)
-                    .year(currentYear)
-                    .actualPayment(actualPayment)
-                    .paymentMode(paymentMode)
-                    .balance(balance)
-                    .build();
-            txnList.add(maintenanceTxn);
-            rowsAdded++;
-        }
-        maintenanceTxnDAO.saveAll(txnList);
-        txnResponse.setInfoMessage(rowsAdded + " rows added.");
-        return txnResponse;
-    }
-
-    @Transactional
     public TxnResponse deleteTransactions(List<Long> txnIds) {
         for(Long txnId : txnIds) {
             maintenanceTxnDAO.deleteById(txnId);
@@ -159,6 +117,37 @@ public class FlatMaintenanceService {
         result.put("3", thirdFloor);
         result.put("4", fourthFloor);
         return result;
+    }
+
+    public String clearFromBalance(ClearFromBalance clearFromBalance) {
+        FlatMaintenanceLookUp flatData = getIndividualFlatData(clearFromBalance.getFlatNumber());
+        Double expMaintenance = flatData.getExpectedMaintenance();
+        String currentMonth = MaintenanceUtil.getMonthInString(Integer.valueOf(clearFromBalance.getMonth()) + 1);
+        String[] prev = getPreviousMonthYear(currentMonth, clearFromBalance.getYear());
+        MaintenanceTxn prevTxn = maintenanceTxnDAO.getTxn(prev[0],
+                prev[1],
+                clearFromBalance.getFlatNumber());
+        if(null == prevTxn) {
+            return "No Previous Txn Available.";
+        }
+        Double balance = prevTxn.getBalance();
+        if(balance >= expMaintenance) {
+            Double updatedBalance = balance - expMaintenance;
+            MaintenanceTxn maintenanceTxn = MaintenanceTxn.builder()
+                    .flatNumber(clearFromBalance.getFlatNumber())
+                    .txnDate(new Date())
+                    .month(clearFromBalance.getMonth())
+                    .year(clearFromBalance.getYear())
+                    .actualPayment(0.0)
+                    .paymentMode("online")
+                    .balance(updatedBalance)
+                    .build();
+            maintenanceTxnDAO.save(maintenanceTxn);
+            return "Maintenance adjusted from balance, new balance = " + updatedBalance;
+        }
+        else {
+            return "Insufficient / Zero Balance to clear dues!";
+        }
     }
 
     public Map<String, Double> getFloorWiseTotal(String month, String year) {
