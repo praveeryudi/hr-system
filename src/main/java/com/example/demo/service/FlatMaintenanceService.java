@@ -14,9 +14,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.example.demo.util.MaintenanceUtil.getMonthInString;
 import static com.example.demo.util.MaintenanceUtil.getPreviousMonthYear;
 
 @Service
@@ -53,7 +55,7 @@ public class FlatMaintenanceService {
         String paymentMode = txnRequest.getPaymentMode();
 
         // Compute Balance
-        currentMonth = MaintenanceUtil.getMonthInString(Integer.valueOf(currentMonth) + 1);
+        currentMonth = getMonthInString(Integer.valueOf(currentMonth) + 1);
         // Check if entry for current month already exists
         MaintenanceTxn txn = maintenanceTxnDAO.getTxn(currentMonth, currentYear, flatNumber);
         if(null != txn) {
@@ -103,7 +105,7 @@ public class FlatMaintenanceService {
     }
 
     public Map<String, List<FlatMaintenanceLookUp>> getPendingFlatsList(String month, String year) {
-        month = MaintenanceUtil.getMonthInString(Integer.valueOf(month));
+        month = getMonthInString(Integer.valueOf(month));
         List<FlatMaintenanceLookUp> pendingFlats = flatMaintenanceLookUpDAO.getPendingFlats(month, year);
         Map<String, List<FlatMaintenanceLookUp>> result = new HashMap<>();
         List<FlatMaintenanceLookUp> groundFloor = pendingFlats.stream().filter(flat -> flat.getFlatNumber().startsWith("0")).collect(Collectors.toList());
@@ -119,10 +121,48 @@ public class FlatMaintenanceService {
         return result;
     }
 
+    public Map<String, Double> getBalances() {
+
+        Map<String, Double> result = new HashMap<>();
+        List<FlatMaintenanceLookUp> allFlats = flatMaintenanceLookUpDAO.findAll();
+        for(FlatMaintenanceLookUp flat : allFlats) {
+            Double balance;
+            LocalDate currentDate = LocalDate.now();
+            int currentMonth = currentDate.getMonthValue();
+            int currentYear = currentDate.getYear();
+
+            //Case 1. If current month's txn present
+            MaintenanceTxn currTxn = maintenanceTxnDAO.getTxn(getMonthInString(currentMonth),
+                    String.valueOf(currentYear),
+                    flat.getFlatNumber());
+            if(null != currTxn) {
+                balance = currTxn.getBalance();
+                if(balance > 0.0) {
+                    result.put(flat.getFlatNumber(), balance);
+                }
+            }
+
+            // Case 2. Check balance in prev month txn
+            else {
+                String[] prev = getPreviousMonthYear(getMonthInString(currentMonth), String.valueOf(currentYear));
+                MaintenanceTxn prevTxn = maintenanceTxnDAO.getTxn(prev[0],
+                        prev[1],
+                        flat.getFlatNumber());
+                if(null != prevTxn) {
+                    balance = prevTxn.getBalance();
+                    if(balance > 0.0) {
+                        result.put(flat.getFlatNumber(), balance);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     public String clearFromBalance(ClearFromBalance clearFromBalance) {
         FlatMaintenanceLookUp flatData = getIndividualFlatData(clearFromBalance.getFlatNumber());
         Double expMaintenance = flatData.getExpectedMaintenance();
-        String currentMonth = MaintenanceUtil.getMonthInString(Integer.valueOf(clearFromBalance.getMonth()) + 1);
+        String currentMonth = getMonthInString(Integer.valueOf(clearFromBalance.getMonth()) + 1);
         String[] prev = getPreviousMonthYear(currentMonth, clearFromBalance.getYear());
         MaintenanceTxn prevTxn = maintenanceTxnDAO.getTxn(prev[0],
                 prev[1],
@@ -151,7 +191,7 @@ public class FlatMaintenanceService {
     }
 
     public Map<String, Double> getFloorWiseTotal(String month, String year) {
-        month = MaintenanceUtil.getMonthInString(Integer.valueOf(month));
+        month = getMonthInString(Integer.valueOf(month));
         Map<String, Double> result = new LinkedHashMap<>();
         for(int floor = 0; floor <= 4; floor++) {
             Double total = maintenanceTxnDAO.getFloorWiseMaintenance(month, year, String.valueOf(floor));

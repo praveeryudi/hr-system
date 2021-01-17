@@ -83,6 +83,13 @@ public class FlatMaintenanceController {
         return flatMaintenanceService.getPendingFlatsList(month, year);
     }
 
+    @GetMapping(value = "/getBalances")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Map<String, Double> getBalances() {
+        return flatMaintenanceService.getBalances();
+    }
+
     @PostMapping(value = "/adjustFromBalance")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
